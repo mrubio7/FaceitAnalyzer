@@ -21,4 +21,5 @@ func main() {
 func api() {
 
 	http.HandleFunc("/analyze", controllers.AnalyzeMatch)
+	http.HandleFunc("/train", controllers.CreateCSV)
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"faceitAI/src/models"
 	"faceitAI/src/models/dto"
+	"fmt"
 	"sync"
 	"time"
 )
@@ -14,6 +15,7 @@ type iCreator interface {
 	CreateMatch(data []byte) models.Match
 	CreateMatchListDaysAgo(data []byte, days int) []string
 	CreateStats(player *models.Player, wg *sync.WaitGroup)
+	CreateStatsToCSV(player *models.Player) string
 }
 
 type creator struct {
@@ -59,4 +61,26 @@ func (c creator) CreateMatchListDaysAgo(data []byte, days int) []string {
 	}
 
 	return listMatches
+}
+
+func (c creator) CreateStatsToCSV(player *models.Player) string {
+	matches := Finder.FindMatchesStats7Days(player.Id)
+
+	Operations.CreateAverageMatch(player, matches)
+
+	res := fmt.Sprintf("%d, %d, %d, %d, %d, %d, %d, %d, %f, %f, %f, %f",
+		player.Stats.Kills,
+		player.AverageTeamStats.Kills,
+		player.Stats.Assists,
+		player.AverageTeamStats.Assists,
+		player.Stats.Deaths,
+		player.AverageTeamStats.Deaths,
+		player.Stats.HSPercent,
+		player.AverageTeamStats.HSPercent,
+		player.Stats.KillPerRound,
+		player.Stats.KillDeathRating,
+		player.AverageTeamStats.KillPerRound,
+		player.AverageTeamStats.KillDeathRating)
+
+	return res
 }
