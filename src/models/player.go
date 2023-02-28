@@ -1,10 +1,10 @@
 package models
 
 type Player struct {
-	Id           string       `json:"playerId"`
-	Nickname     string       `json:"nickname"`
-	MyStats      []MatchStats `json:"stats"`
-	AverageStats []MatchStats `json:"averageStats"`
+	Id           string     `json:"playerId"`
+	Nickname     string     `json:"nickname"`
+	MyStats      MatchStats `json:"stats"`
+	AverageStats MatchStats `json:"averageStats"`
 }
 
 type MatchStats struct {

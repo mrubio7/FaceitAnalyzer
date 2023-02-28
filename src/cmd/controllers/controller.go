@@ -13,7 +13,7 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 	match := helpers.Finder.FindMatch(matchId)
 
 	var wg sync.WaitGroup
-	wg.Add(10)
+	wg.Add(1)
 
 	go helpers.Creator.CreateStats(&match.TeamA.Players[0], &wg)
 	//...
