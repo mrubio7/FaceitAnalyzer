@@ -13,11 +13,20 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 	match := helpers.Finder.FindMatch(matchId)
 
 	var wg sync.WaitGroup
-	wg.Add(1)
+
+	wg.Add(10)
 
 	go helpers.Creator.CreateStats(&match.TeamA.Players[0], &wg)
-	//...
-	//...
+	go helpers.Creator.CreateStats(&match.TeamA.Players[1], &wg)
+	go helpers.Creator.CreateStats(&match.TeamA.Players[2], &wg)
+	go helpers.Creator.CreateStats(&match.TeamA.Players[3], &wg)
+	go helpers.Creator.CreateStats(&match.TeamA.Players[4], &wg)
+
+	go helpers.Creator.CreateStats(&match.TeamB.Players[0], &wg)
+	go helpers.Creator.CreateStats(&match.TeamB.Players[1], &wg)
+	go helpers.Creator.CreateStats(&match.TeamB.Players[2], &wg)
+	go helpers.Creator.CreateStats(&match.TeamB.Players[3], &wg)
+	go helpers.Creator.CreateStats(&match.TeamB.Players[4], &wg)
 
 	wg.Wait()
 }

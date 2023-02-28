@@ -3,6 +3,7 @@ package helpers
 import (
 	"faceitAI/src/models"
 	"faceitAI/src/models/dto"
+	"strconv"
 	"time"
 )
 
@@ -55,5 +56,25 @@ func (m mapper) PlayerDto_To_Player(dto dto.PlayersDto) models.Player {
 	player.Id = dto.PlayerID
 	player.Nickname = dto.Nickname
 
+	player.Stats = m.PlayerDto_To_Stats(dto)
+
 	return player
+}
+
+func (m mapper) PlayerDto_To_Stats(dto dto.PlayersDto) models.MatchStats {
+	var value float64
+	var stats models.MatchStats
+
+	stats.Assists, _ = strconv.Atoi(dto.I7)
+	stats.Deaths, _ = strconv.Atoi(dto.I8)
+	stats.Kills, _ = strconv.Atoi(dto.I6)
+
+	value, _ = strconv.ParseFloat(dto.C3, 32)
+	stats.KillPerRound = float32(value)
+
+	value, _ = strconv.ParseFloat(dto.C2, 32)
+	stats.KillDeathRating = float32(value)
+
+	stats.HSPercent, _ = strconv.Atoi(dto.C4)
+	return stats
 }
