@@ -6,7 +6,7 @@ import (
 
 type Match struct {
 	Date  time.Time `json:"date"`
-	Map   string    `json:"map"`
+	Map   string    `json:"i1"`
 	TeamA Team      `json:"teamA"`
 	TeamB Team      `json:"teamB"`
 }

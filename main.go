@@ -20,5 +20,5 @@ func main() {
 
 func api() {
 
-	http.HandleFunc("/find", controllers.FindMatchStats)
+	http.HandleFunc("/analyze", controllers.AnalyzeMatch)
 }

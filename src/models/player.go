@@ -1,12 +1,15 @@
 package models
 
 type Player struct {
-	Id       string             `json:"playerId"`
-	Nickname string             `json:"nickname"`
-	Stats    []PlayerMatchStats `json:"stats"`
+	Id           string       `json:"playerId"`
+	Nickname     string       `json:"nickname"`
+	MyStats      []MatchStats `json:"stats"`
+	AverageStats []MatchStats `json:"averageStats"`
 }
 
-type PlayerMatchStats struct {
+type MatchStats struct {
+	Win             bool    `json:"i17"`
+	NumRounds       int     `json:"c5"`
 	Kills           int     `json:"i6"`
 	Deaths          int     `json:"i8"`
 	Assists         int     `json:"i7"`
@@ -17,4 +20,7 @@ type PlayerMatchStats struct {
 	TripleKills     int     `json:"i14"`
 	QuadroKills     int     `json:"i15"`
 	PentaKills      int     `json:"i16"`
+	EnemyAverageElo int     `json:"enemyAverageElo"`
+	Elo             int     `json:"elo"`
+	GamesToday      int     `json:"gamesToday"`
 }
