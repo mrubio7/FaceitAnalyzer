@@ -10,6 +10,7 @@ type iOperations interface {
 	CreateAverageMatch(player *models.Player, match []models.Match)
 	CalculateMyAverage(myStats *models.MatchStats, matches []models.Match, nickname string)
 	CalculateMatchAverage(average *models.MatchStats, matches []models.Match)
+	GetStats(players []models.Player) models.MatchStats
 }
 
 type operations struct {
@@ -18,12 +19,11 @@ type operations struct {
 
 func (o operations) CreateAverageMatch(player *models.Player, matches []models.Match) {
 	o.CalculateMyAverage(&player.Stats, matches, player.Nickname)
-	o.CalculateMatchAverage(&player.AverageTeamStats, matches)
-
+	o.CalculateEnemyAverage(&player.EnemyStats, matches, player.Nickname)
+	o.CalculateTeamAverage(&player.TeamStats, matches, player.Nickname)
 }
 
 func (o operations) CalculateMyAverage(myStats *models.MatchStats, matches []models.Match, nickname string) {
-
 	for _, match := range matches {
 		for _, player := range match.TeamA.Players {
 			if player.Nickname == nickname {
@@ -43,36 +43,62 @@ func (o operations) CalculateMyAverage(myStats *models.MatchStats, matches []mod
 	averageStats(myStats, count)
 }
 
-func (o operations) CalculateMatchAverage(average *models.MatchStats, matches []models.Match) {
+func (o operations) CalculateEnemyAverage(average *models.MatchStats, matches []models.Match, nick string) {
+	var stats []models.MatchStats
 
 	for _, match := range matches {
 		for _, player := range match.TeamA.Players {
-			sumStats(player.Stats, average)
-		}
-		for _, player := range match.TeamB.Players {
-			sumStats(player.Stats, average)
+			var stat models.MatchStats
+
+			if player.Nickname != nick {
+				stat = GetStats(match.TeamA.Players)
+			} else {
+				stat = GetStats(match.TeamB.Players)
+			}
+
+			stats = append(stats, stat)
 		}
 	}
-	averageStats(average, 10)
+}
 
-	count := len(matches)
-	averageStats(average, count)
+func (o operations) CalculateTeamAverage(average *models.MatchStats, matches []models.Match, nick string) {
+	var stats []models.MatchStats
+
+	for _, match := range matches {
+		for _, player := range match.TeamA.Players {
+			var stat models.MatchStats
+
+			if player.Nickname == nick {
+				stat = GetStats(match.TeamA.Players)
+			} else {
+				stat = GetStats(match.TeamB.Players)
+			}
+
+			stats = append(stats, stat)
+		}
+	}
+}
+
+func GetStats(players []models.Player) models.MatchStats {
+	var stat models.MatchStats
+
+	for _, player := range players {
+		sumStats(player.Stats, &stat)
+	}
+
+	averageStats(&stat, 5)
+
+	return stat
 }
 
 func sumStats(player models.MatchStats, stats *models.MatchStats) {
-	stats.Assists += player.Assists
-	stats.Deaths += player.Deaths
-	stats.HSPercent += player.HSPercent
 	stats.KillDeathRating += player.KillDeathRating
 	stats.KillPerRound += player.KillPerRound
-	stats.Kills += player.Kills
+	stats.MVP += player.MVP
 }
 
 func averageStats(stats *models.MatchStats, num int) {
-	stats.Assists /= num
-	stats.Deaths /= num
-	stats.HSPercent /= num
 	stats.KillDeathRating /= float32(num)
 	stats.KillPerRound /= float32(num)
-	stats.Kills /= num
+	stats.MVP /= float32(num)
 }

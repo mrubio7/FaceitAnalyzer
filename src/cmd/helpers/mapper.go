@@ -65,16 +65,13 @@ func (m mapper) PlayerDto_To_Stats(dto dto.PlayersDto) models.MatchStats {
 	var value float64
 	var stats models.MatchStats
 
-	stats.Assists, _ = strconv.Atoi(dto.I7)
-	stats.Deaths, _ = strconv.Atoi(dto.I8)
-	stats.Kills, _ = strconv.Atoi(dto.I6)
-
 	value, _ = strconv.ParseFloat(dto.C3, 32)
 	stats.KillPerRound = float32(value)
 
 	value, _ = strconv.ParseFloat(dto.C2, 32)
 	stats.KillDeathRating = float32(value)
 
-	stats.HSPercent, _ = strconv.Atoi(dto.C4)
+	value, _ = strconv.ParseFloat(dto.I7, 32)
+	stats.MVP = float32(value)
 	return stats
 }
