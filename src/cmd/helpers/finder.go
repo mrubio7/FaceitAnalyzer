@@ -57,7 +57,3 @@ func (f finder) FindMatch(matchId string) models.Match {
 
 	return match
 }
-
-func (f finder) FindPlayerMatchStats(matchId string) {
-
-}
