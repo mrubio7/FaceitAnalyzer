@@ -44,7 +44,6 @@ func (o operations) CalculateMyAverage(myStats *models.MatchStats, matches []mod
 }
 
 func (o operations) CalculateEnemyAverage(average *models.MatchStats, matches []models.Match, nick string) {
-	var stats []models.MatchStats
 
 	for _, match := range matches {
 		for _, player := range match.TeamA.Players {
@@ -56,13 +55,14 @@ func (o operations) CalculateEnemyAverage(average *models.MatchStats, matches []
 				stat = GetStats(match.TeamB.Players)
 			}
 
-			stats = append(stats, stat)
+			sumStats(stat, average)
 		}
 	}
+	averageStats(average, 5)
+	averageStats(average, len(matches))
 }
 
 func (o operations) CalculateTeamAverage(average *models.MatchStats, matches []models.Match, nick string) {
-	var stats []models.MatchStats
 
 	for _, match := range matches {
 		for _, player := range match.TeamA.Players {
@@ -74,9 +74,11 @@ func (o operations) CalculateTeamAverage(average *models.MatchStats, matches []m
 				stat = GetStats(match.TeamB.Players)
 			}
 
-			stats = append(stats, stat)
+			sumStats(stat, average)
 		}
 	}
+	averageStats(average, 5)
+	averageStats(average, len(matches))
 }
 
 func GetStats(players []models.Player) models.MatchStats {
