@@ -52,32 +52,32 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 
 func CreateCSV(w http.ResponseWriter, r *http.Request) {
 	log.Println("OK   - Initializing CreateCSV")
-	//r.Header.Set("Authorize", "Bearer cd3d93e5-815d-48ec-b6d9-3b77166a3399")
-	r.Header.Set("Authorize", "Bearer 5650365f-4b6e-41d0-90d3-f9a3bcb5dccb")
+	r.Header.Set("Authorize", "Bearer cd3d93e5-815d-48ec-b6d9-3b77166a3399")
+	//r.Header.Set("Authorize", "Bearer 5650365f-4b6e-41d0-90d3-f9a3bcb5dccb")
 
 	matches := []string{
-		"1-57093027-40d8-4005-8d0d-2a0db30bdbbf",
-		"1-c91c5b52-93d3-4912-a4fc-400cd7a089cf",
-		"1-a7e211d2-babf-4e7f-96fc-36c1cd314863",
-		"1-b5b76c5b-b26c-4809-9c8a-04908677547c",
-		"1-42960fe5-50a8-4188-b847-d9d3109852dd",
-		"1-0c7c4a43-955c-4584-b5d8-865c9dff5a58",
-		"1-3b8d2e1c-ecef-41c5-9666-e0ddf639420c",
-		"1-0c1f7923-02e8-4881-ba8b-c0d618b3a3d8",
-		"1-863c1135-4eae-4f42-8318-fa11ac4d786e",
-		"1-bfa78781-6ef8-4a0a-adcd-165db0a9a6b8",
-		"1-4d3e9bad-41ec-4504-9c37-e9b73b8920fa",
-		"1-00038c2c-a69d-4462-b310-e9094cee4842",
-		"1-3e245a8b-f5aa-4f60-bea7-2ace19c02a44",
-		"1-a8a7ecb6-4f82-4ea1-9aa4-e1a0554de4f4",
-		"1-a5f5f71e-d442-45a9-a4c7-1874ac68e2b1",
-		"1-6a065d89-3395-4e1f-9cb5-e997de96b6a4",
-		"1-31259c50-096e-4f80-85f3-55770da32a8a",
-		"1-fed8677c-7404-4137-a56b-8535d91a232c",
-		"1-87044324-78e7-4721-b4cc-876cd0da6a05",
-		"1-a2cf426e-18e6-44d1-966b-e07efd909b14",
-		"1-6a065d89-3395-4e1f-9cb5-e997de96b6a4",
-		"1-5ea2a916-9dc7-4ea6-8470-0521cf01fe02",
+		// "1-57093027-40d8-4005-8d0d-2a0db30bdbbf",
+		// "1-c91c5b52-93d3-4912-a4fc-400cd7a089cf",
+		// "1-a7e211d2-babf-4e7f-96fc-36c1cd314863",
+		// "1-b5b76c5b-b26c-4809-9c8a-04908677547c",
+		// "1-42960fe5-50a8-4188-b847-d9d3109852dd",
+		// "1-0c7c4a43-955c-4584-b5d8-865c9dff5a58",
+		// "1-3b8d2e1c-ecef-41c5-9666-e0ddf639420c",
+		// "1-0c1f7923-02e8-4881-ba8b-c0d618b3a3d8",
+		// "1-863c1135-4eae-4f42-8318-fa11ac4d786e",
+		// "1-bfa78781-6ef8-4a0a-adcd-165db0a9a6b8",
+		// "1-4d3e9bad-41ec-4504-9c37-e9b73b8920fa",
+		// "1-00038c2c-a69d-4462-b310-e9094cee4842",
+		// "1-3e245a8b-f5aa-4f60-bea7-2ace19c02a44",
+		// "1-a8a7ecb6-4f82-4ea1-9aa4-e1a0554de4f4",
+		// "1-a5f5f71e-d442-45a9-a4c7-1874ac68e2b1",
+		// "1-6a065d89-3395-4e1f-9cb5-e997de96b6a4",
+		// "1-31259c50-096e-4f80-85f3-55770da32a8a",
+		// "1-fed8677c-7404-4137-a56b-8535d91a232c",
+		// "1-87044324-78e7-4721-b4cc-876cd0da6a05",
+		// "1-a2cf426e-18e6-44d1-966b-e07efd909b14",
+		// "1-6a065d89-3395-4e1f-9cb5-e997de96b6a4",
+		// "1-5ea2a916-9dc7-4ea6-8470-0521cf01fe02",
 		"1-93b528a1-4e46-4e0c-acd7-f4c0dfe8f683",
 		"1-8565ca3b-01dd-4b8a-a8fa-ad725755924f",
 		"1-6c9b9b08-69a5-417f-b17d-43cc58047eaa",
@@ -193,14 +193,14 @@ func CreateCSV(w http.ResponseWriter, r *http.Request) {
 
 func createHeader(h string) string {
 	return fmt.Sprintf("%s, %s, %s, %s, %s, %s, %s, %s, %s",
-		h+"_KR",
 		h+"_KD",
+		h+"_KR",
 		h+"_MVP",
-		h+"_T_KR",
 		h+"_T_KD",
+		h+"_T_KR",
 		h+"_T_MVP",
-		h+"_E_KR",
 		h+"_E_KD",
+		h+"_E_KR",
 		h+"_E_MVP")
 }
 
