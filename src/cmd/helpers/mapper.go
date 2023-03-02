@@ -36,6 +36,7 @@ func (m mapper) TeamDto_To_Team(dto dto.TeamsDto) models.Team {
 	var team models.Team
 
 	team.Players = m.PlayersDto_To_Players(dto.Players)
+	team.Win = dto.I17
 
 	return team
 }

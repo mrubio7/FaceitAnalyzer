@@ -9,5 +9,4 @@ type Match struct {
 	Map   string    `json:"i1"`
 	TeamA Team      `json:"teamA"`
 	TeamB Team      `json:"teamB"`
-	Win   bool      `json:"win"`
 }

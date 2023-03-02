@@ -34,6 +34,20 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 	go helpers.Creator.CreateStats(&match.TeamB.Players[4], &wg)
 
 	wg.Wait()
+
+	var averageTeamA models.Player
+	var averageTeamB models.Player
+
+	for _, player := range match.TeamA.Players {
+		sumStats(player.Stats, &averageTeamA.Stats)
+		sumStats(player.EnemyStats, &averageTeamA.EnemyStats)
+		sumStats(player.TeamStats, &averageTeamA.TeamStats)
+	}
+	for _, player := range match.TeamB.Players {
+		sumStats(player.Stats, &averageTeamB.Stats)
+		sumStats(player.EnemyStats, &averageTeamA.EnemyStats)
+		sumStats(player.TeamStats, &averageTeamA.TeamStats)
+	}
 }
 
 func CreateCSV(w http.ResponseWriter, r *http.Request) {
@@ -113,22 +127,16 @@ func CreateCSV(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	headers := fmt.Sprintf("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n",
-		createHeader("A0"),
-		createHeader("A1"),
-		createHeader("A2"),
-		createHeader("A3"),
-		createHeader("A4"),
-		createHeader("B0"),
-		createHeader("B1"),
-		createHeader("B2"),
-		createHeader("B3"),
-		createHeader("B4"))
+	headers := fmt.Sprintf("%s, %s, %s\n",
+		createHeader("TeamA"),
+		createHeader("TeamB"),
+		"TeamA_Wins")
 
 	f.WriteString(headers)
 
 	for _, matchId := range matches {
 		match := helpers.Finder.FindMatch(matchId)
+
 		log.Printf("WORK - Analyzing match (%s)\n", matchId)
 
 		var wg sync.WaitGroup
@@ -146,22 +154,38 @@ func CreateCSV(w http.ResponseWriter, r *http.Request) {
 		go helpers.Creator.CreateStats(&match.TeamB.Players[4], &wg)
 		wg.Wait()
 
+		var averageTeamA models.Player
+		var averageTeamB models.Player
+
+		for _, player := range match.TeamA.Players {
+			sumStats(player.Stats, &averageTeamA.Stats)
+			sumStats(player.EnemyStats, &averageTeamA.EnemyStats)
+			sumStats(player.TeamStats, &averageTeamA.TeamStats)
+		}
+		for _, player := range match.TeamB.Players {
+			sumStats(player.Stats, &averageTeamB.Stats)
+			sumStats(player.EnemyStats, &averageTeamB.EnemyStats)
+			sumStats(player.TeamStats, &averageTeamB.TeamStats)
+		}
+
+		averageStats(&averageTeamA.EnemyStats, 5)
+		averageStats(&averageTeamA.TeamStats, 5)
+		averageStats(&averageTeamA.Stats, 5)
+		fmt.Printf("Averaged TeamA  ")
+
+		averageStats(&averageTeamB.EnemyStats, 5)
+		averageStats(&averageTeamB.TeamStats, 5)
+		averageStats(&averageTeamB.Stats, 5)
+		fmt.Printf("Averaged TeamB\n")
+
+		str := fmt.Sprintf("%s, %s, %s\n",
+			createPlayerStat(averageTeamA),
+			createPlayerStat(averageTeamB),
+			match.TeamA.Win)
+
+		f.WriteString(str)
+
 		log.Printf("OK   - Analyzed match (%s)\n", matchId)
-
-		statStr := fmt.Sprintf("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n",
-			createPlayerStat(match.TeamA.Players[0]),
-			createPlayerStat(match.TeamA.Players[1]),
-			createPlayerStat(match.TeamA.Players[2]),
-			createPlayerStat(match.TeamA.Players[3]),
-			createPlayerStat(match.TeamA.Players[4]),
-			createPlayerStat(match.TeamB.Players[0]),
-			createPlayerStat(match.TeamB.Players[1]),
-			createPlayerStat(match.TeamB.Players[2]),
-			createPlayerStat(match.TeamB.Players[3]),
-			createPlayerStat(match.TeamB.Players[4]),
-		)
-
-		f.WriteString(statStr)
 
 		time.Sleep(10 * time.Second)
 	}
@@ -192,4 +216,16 @@ func createPlayerStat(pl models.Player) string {
 		pl.EnemyStats.KillPerRound,
 		pl.EnemyStats.MVP,
 	)
+}
+
+func sumStats(player models.MatchStats, stats *models.MatchStats) {
+	stats.KillDeathRating += player.KillDeathRating
+	stats.KillPerRound += player.KillPerRound
+	stats.MVP += player.MVP
+}
+
+func averageStats(stats *models.MatchStats, num int) {
+	stats.KillDeathRating /= float32(num)
+	stats.KillPerRound /= float32(num)
+	stats.MVP /= float32(num)
 }
