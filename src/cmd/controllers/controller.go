@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"sync"
+	"time"
 )
 
 func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
@@ -36,7 +37,9 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateCSV(w http.ResponseWriter, r *http.Request) {
-	r.Header.Set("Authorize", "Bearer cd3d93e5-815d-48ec-b6d9-3b77166a3399")
+	log.Println("OK   - Initializing CreateCSV")
+	//r.Header.Set("Authorize", "Bearer cd3d93e5-815d-48ec-b6d9-3b77166a3399")
+	r.Header.Set("Authorize", "Bearer 5650365f-4b6e-41d0-90d3-f9a3bcb5dccb")
 
 	matches := []string{
 		"1-57093027-40d8-4005-8d0d-2a0db30bdbbf",
@@ -126,6 +129,7 @@ func CreateCSV(w http.ResponseWriter, r *http.Request) {
 
 	for _, matchId := range matches {
 		match := helpers.Finder.FindMatch(matchId)
+		log.Printf("WORK - Analyzing match (%s)\n", matchId)
 
 		var wg sync.WaitGroup
 		wg.Add(10)
@@ -142,6 +146,8 @@ func CreateCSV(w http.ResponseWriter, r *http.Request) {
 		go helpers.Creator.CreateStats(&match.TeamB.Players[4], &wg)
 		wg.Wait()
 
+		log.Printf("OK   - Analyzed match (%s)\n", matchId)
+
 		statStr := fmt.Sprintf("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n",
 			createPlayerStat(match.TeamA.Players[0]),
 			createPlayerStat(match.TeamA.Players[1]),
@@ -156,6 +162,8 @@ func CreateCSV(w http.ResponseWriter, r *http.Request) {
 		)
 
 		f.WriteString(statStr)
+
+		time.Sleep(10 * time.Second)
 	}
 }
 

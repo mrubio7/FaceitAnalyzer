@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 )
 
 var Finder iFinder = finder{}
@@ -46,6 +47,10 @@ func (f finder) FindMatch(matchId string) models.Match {
 	response, err := http.Get(apiurls_constants.GetMatchStats + matchId)
 	if err != nil || response.Status == "404" {
 		log.Fatal(err)
+	}
+	if strings.Contains(response.Status, "429") {
+		log.Fatalln("ERROR - Demasiadas peticiones :(")
+		log.Panic()
 	}
 
 	data, err := io.ReadAll(response.Body)

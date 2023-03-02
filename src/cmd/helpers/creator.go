@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"faceitAI/src/models"
 	"faceitAI/src/models/dto"
+	"fmt"
 	"sync"
 	"time"
 )
@@ -30,12 +31,21 @@ func (c creator) CreateMatch(data []byte) models.Match {
 	return match
 }
 
+var P int = 0
+
 func (c creator) CreateStats(player *models.Player, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	matches := Finder.FindMatchesStats7Days(player.Id)
 
 	Operations.CreateAverageMatch(player, matches)
+
+	fmt.Printf(" P%d ", P)
+	P++
+	if P == 10 {
+		P = 0
+		fmt.Printf("\n")
+	}
 }
 
 func (c creator) CreateMatchListDaysAgo(data []byte, days int) []string {
