@@ -9,7 +9,8 @@ import (
 var Analyze iAnalyze = analyze{}
 
 type iAnalyze interface {
-	Calculate(data []float32)
+	Training(data []models.Results)
+	Predict(data []models.Results)
 }
 
 type analyze struct {
@@ -65,7 +66,7 @@ func dotProduct(a []float64, b []float64) float64 {
 	return sum
 }
 
-func Trainning(data []models.Results) {
+func Training(data []models.Results) {
 	alpha := 0.1
 	lambda := 0.01
 	maxIter := 1000

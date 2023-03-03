@@ -22,4 +22,5 @@ func api() {
 
 	http.HandleFunc("/analyze", controllers.AnalyzeMatch)
 	http.HandleFunc("/data", controllers.CreateCSV)
+	http.HandleFunc("/train", controllers.Training)
 }

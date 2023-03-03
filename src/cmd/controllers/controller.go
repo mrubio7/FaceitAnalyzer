@@ -1,12 +1,14 @@
 package controllers
 
 import (
+	"encoding/csv"
 	"faceitAI/src/cmd/helpers"
 	"faceitAI/src/models"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -189,6 +191,30 @@ func CreateCSV(w http.ResponseWriter, r *http.Request) {
 
 		time.Sleep(10 * time.Second)
 	}
+}
+
+func Training(w http.ResponseWriter, r *http.Request) {
+	fd, _ := os.Open("data/dataTraining.csv")
+	f := csv.NewReader(fd)
+
+	records, _ := f.ReadAll()
+
+	var results []models.Results
+
+	for _, match := range records {
+		var res models.Results
+		for j, data := range match {
+			res.Data[j], _ = strconv.ParseFloat(data, 32)
+		}
+		label := res.Data[len(res.Data)-1]
+		res.Label = int(label)
+
+		res.Data = res.Data[:len(res.Data)-2] //quitamos el ultimo
+
+		results = append(results, res)
+	}
+
+	helpers.Analyze.Training(results)
 }
 
 func createHeader(h string) string {
