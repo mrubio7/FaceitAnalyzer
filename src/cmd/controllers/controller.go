@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 )
@@ -47,9 +48,45 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, player := range match.TeamB.Players {
 		sumStats(player.Stats, &averageTeamB.Stats)
-		sumStats(player.EnemyStats, &averageTeamA.EnemyStats)
-		sumStats(player.TeamStats, &averageTeamA.TeamStats)
+		sumStats(player.EnemyStats, &averageTeamB.EnemyStats)
+		sumStats(player.TeamStats, &averageTeamB.TeamStats)
 	}
+
+	averageStats(&averageTeamA.EnemyStats, 5)
+	averageStats(&averageTeamA.TeamStats, 5)
+	averageStats(&averageTeamA.Stats, 5)
+
+	averageStats(&averageTeamB.EnemyStats, 5)
+	averageStats(&averageTeamB.TeamStats, 5)
+	averageStats(&averageTeamB.Stats, 5)
+
+	var result models.Results
+
+	result.Data = append(result.Data, float64(averageTeamA.EnemyStats.KillDeathRating))
+	result.Data = append(result.Data, float64(averageTeamA.EnemyStats.KillPerRound))
+	result.Data = append(result.Data, float64(averageTeamA.EnemyStats.MVP))
+
+	result.Data = append(result.Data, float64(averageTeamA.TeamStats.KillDeathRating))
+	result.Data = append(result.Data, float64(averageTeamA.TeamStats.KillPerRound))
+	result.Data = append(result.Data, float64(averageTeamA.TeamStats.MVP))
+
+	result.Data = append(result.Data, float64(averageTeamA.Stats.KillDeathRating))
+	result.Data = append(result.Data, float64(averageTeamA.Stats.KillPerRound))
+	result.Data = append(result.Data, float64(averageTeamA.Stats.MVP))
+
+	result.Data = append(result.Data, float64(averageTeamB.EnemyStats.KillDeathRating))
+	result.Data = append(result.Data, float64(averageTeamB.EnemyStats.KillPerRound))
+	result.Data = append(result.Data, float64(averageTeamB.EnemyStats.MVP))
+
+	result.Data = append(result.Data, float64(averageTeamB.TeamStats.KillDeathRating))
+	result.Data = append(result.Data, float64(averageTeamB.TeamStats.KillPerRound))
+	result.Data = append(result.Data, float64(averageTeamB.TeamStats.MVP))
+
+	result.Data = append(result.Data, float64(averageTeamB.Stats.KillDeathRating))
+	result.Data = append(result.Data, float64(averageTeamB.Stats.KillPerRound))
+	result.Data = append(result.Data, float64(averageTeamB.Stats.MVP))
+
+	helpers.Analyze.Predict(result)
 }
 
 func CreateCSV(w http.ResponseWriter, r *http.Request) {
@@ -201,15 +238,27 @@ func Training(w http.ResponseWriter, r *http.Request) {
 
 	var results []models.Results
 
-	for _, match := range records {
-		var res models.Results
-		for j, data := range match {
-			res.Data[j], _ = strconv.ParseFloat(data, 32)
+	for i, match := range records {
+		if i == 64 {
+			i = 64
 		}
+		var res models.Results
+
+		if i == 0 {
+			continue
+		}
+
+		for _, data := range match {
+			data = strings.TrimSpace(data)
+
+			d, _ := strconv.ParseFloat(data, 64)
+			res.Data = append(res.Data, d)
+		}
+
 		label := res.Data[len(res.Data)-1]
 		res.Label = int(label)
 
-		res.Data = res.Data[:len(res.Data)-2] //quitamos el ultimo
+		res.Data = res.Data[:len(res.Data)-1] //quitamos el ultimo
 
 		results = append(results, res)
 	}

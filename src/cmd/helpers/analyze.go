@@ -10,7 +10,7 @@ var Analyze iAnalyze = analyze{}
 
 type iAnalyze interface {
 	Training(data []models.Results)
-	Predict(data []models.Results)
+	Predict(data models.Results)
 }
 
 type analyze struct {
@@ -49,13 +49,8 @@ func gradientDescent(theta []float64, samples []models.Results, alpha float64, l
 	return theta
 }
 
-func predict(theta []float64, features []float64) int {
-	h := sigmoid(dotProduct(theta, features))
-	if h >= 0.5 {
-		return 1
-	} else {
-		return 0
-	}
+func predict(theta []float64, features []float64) float64 {
+	return sigmoid(dotProduct(theta, features))
 }
 
 func dotProduct(a []float64, b []float64) float64 {
@@ -66,10 +61,10 @@ func dotProduct(a []float64, b []float64) float64 {
 	return sum
 }
 
-func Training(data []models.Results) {
+func (a analyze) Training(data []models.Results) {
 	alpha := 0.1
 	lambda := 0.01
-	maxIter := 1000
+	maxIter := 5000
 
 	n := len(data[0].Data)
 	theta := make([]float64, n)
@@ -77,16 +72,17 @@ func Training(data []models.Results) {
 	for i := 0; i < maxIter; i++ {
 		J := costFunction(theta, data, lambda)
 		theta = gradientDescent(theta, data, alpha, lambda)
+		fmt.Println(theta)
 		fmt.Println("Iteración:", i+1, "Coste:", J)
 	}
 
 }
 
-func Predict(data []models.Results) {
-	n := len(data[0].Data)
-	theta := make([]float64, n)
+func (a analyze) Predict(data models.Results) {
 
-	newSample := data[1].Data
+	theta := []float64{2.621290464066871, 0.4906159278448144, 1.271165474863099, 0.02594410857806587, 0.19981465381570995, -2.505114758295816, -0.7492416802685565, -0.172501877591028, -2.8772545207431603, -0.4035303506674547, -0.44031867535800534, -1.1223985283530968, -0.5162679352623092, -0.3250840593052962, 2.405242809372621, 0.8621031408213191, 0.15635298402142783, 2.225612434445203}
+
+	newSample := data.Data
 	prediction := predict(theta, newSample)
 	fmt.Println(prediction)
 }
