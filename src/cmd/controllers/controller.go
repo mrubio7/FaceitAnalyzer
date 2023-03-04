@@ -92,6 +92,84 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%f", prediction)
 }
 
+func AnalyzePreviusMatch(w http.ResponseWriter, r *http.Request) {
+	r.Header.Set("Authorize", "Bearer cd3d93e5-815d-48ec-b6d9-3b77166a3399")
+
+	matchId := r.URL.Query().Get("q")
+	//match := helpers.Finder.FindMatch(matchId)
+	liveMatch := helpers.Finder.FindMatch(matchId)
+
+	var wg sync.WaitGroup
+
+	wg.Add(10)
+
+	go helpers.Creator.CreateStats(&liveMatch.TeamA.Players[0], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamA.Players[1], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamA.Players[2], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamA.Players[3], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamA.Players[4], &wg)
+
+	go helpers.Creator.CreateStats(&liveMatch.TeamB.Players[0], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamB.Players[1], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamB.Players[2], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamB.Players[3], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamB.Players[4], &wg)
+
+	wg.Wait()
+
+	var averageTeamA models.Player
+	var averageTeamB models.Player
+
+	for _, player := range liveMatch.TeamA.Players {
+		sumStats(player.Stats, &averageTeamA.Stats)
+		sumStats(player.EnemyStats, &averageTeamA.EnemyStats)
+		sumStats(player.TeamStats, &averageTeamA.TeamStats)
+	}
+	for _, player := range liveMatch.TeamB.Players {
+		sumStats(player.Stats, &averageTeamB.Stats)
+		sumStats(player.EnemyStats, &averageTeamB.EnemyStats)
+		sumStats(player.TeamStats, &averageTeamB.TeamStats)
+	}
+
+	averageStats(&averageTeamA.EnemyStats, 5)
+	averageStats(&averageTeamA.TeamStats, 5)
+	averageStats(&averageTeamA.Stats, 5)
+
+	averageStats(&averageTeamB.EnemyStats, 5)
+	averageStats(&averageTeamB.TeamStats, 5)
+	averageStats(&averageTeamB.Stats, 5)
+
+	var result models.Results
+
+	result.Data = append(result.Data, float64(averageTeamA.EnemyStats.KillDeathRating))
+	result.Data = append(result.Data, float64(averageTeamA.EnemyStats.KillPerRound))
+	result.Data = append(result.Data, float64(averageTeamA.EnemyStats.MVP))
+
+	result.Data = append(result.Data, float64(averageTeamA.TeamStats.KillDeathRating))
+	result.Data = append(result.Data, float64(averageTeamA.TeamStats.KillPerRound))
+	result.Data = append(result.Data, float64(averageTeamA.TeamStats.MVP))
+
+	result.Data = append(result.Data, float64(averageTeamA.Stats.KillDeathRating))
+	result.Data = append(result.Data, float64(averageTeamA.Stats.KillPerRound))
+	result.Data = append(result.Data, float64(averageTeamA.Stats.MVP))
+
+	result.Data = append(result.Data, float64(averageTeamB.EnemyStats.KillDeathRating))
+	result.Data = append(result.Data, float64(averageTeamB.EnemyStats.KillPerRound))
+	result.Data = append(result.Data, float64(averageTeamB.EnemyStats.MVP))
+
+	result.Data = append(result.Data, float64(averageTeamB.TeamStats.KillDeathRating))
+	result.Data = append(result.Data, float64(averageTeamB.TeamStats.KillPerRound))
+	result.Data = append(result.Data, float64(averageTeamB.TeamStats.MVP))
+
+	result.Data = append(result.Data, float64(averageTeamB.Stats.KillDeathRating))
+	result.Data = append(result.Data, float64(averageTeamB.Stats.KillPerRound))
+	result.Data = append(result.Data, float64(averageTeamB.Stats.MVP))
+
+	prediction := helpers.Analyze.Predict(result)
+
+	fmt.Fprintf(w, "%f", prediction)
+}
+
 func CreateCSV(w http.ResponseWriter, r *http.Request) {
 	log.Println("OK   - Initializing CreateCSV")
 	r.Header.Set("Authorize", "Bearer cd3d93e5-815d-48ec-b6d9-3b77166a3399")
