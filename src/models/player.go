@@ -3,6 +3,8 @@ package models
 type Player struct {
 	Id         string     `json:"playerId"`
 	Nickname   string     `json:"nickname"`
+	Level      int        `json:"lvl"`
+	Avatar     string     `json:"avatar"`
 	Stats      MatchStats `json:"stats"`
 	TeamStats  MatchStats `json:"teamStats"`
 	EnemyStats MatchStats `json:"enemyStats"`

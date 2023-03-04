@@ -10,7 +10,7 @@ var Analyze iAnalyze = analyze{}
 
 type iAnalyze interface {
 	Training(data []models.Results)
-	Predict(data models.Results)
+	Predict(data models.Results) float64
 }
 
 type analyze struct {
@@ -64,7 +64,7 @@ func dotProduct(a []float64, b []float64) float64 {
 func (a analyze) Training(data []models.Results) {
 	alpha := 0.1
 	lambda := 0.01
-	maxIter := 5000
+	maxIter := 1000
 
 	n := len(data[0].Data)
 	theta := make([]float64, n)
@@ -78,11 +78,11 @@ func (a analyze) Training(data []models.Results) {
 
 }
 
-func (a analyze) Predict(data models.Results) {
+func (a analyze) Predict(data models.Results) float64 {
 
-	theta := []float64{2.621290464066871, 0.4906159278448144, 1.271165474863099, 0.02594410857806587, 0.19981465381570995, -2.505114758295816, -0.7492416802685565, -0.172501877591028, -2.8772545207431603, -0.4035303506674547, -0.44031867535800534, -1.1223985283530968, -0.5162679352623092, -0.3250840593052962, 2.405242809372621, 0.8621031408213191, 0.15635298402142783, 2.225612434445203}
-
+	theta := []float64{1.1796274803348248, 0.45350283575717365, 1.2265378863189635, 0.010213849936610016, 0.019863311713379954, -1.2547548536347255, -0.18976113767438424, -0.07269139545000601, -1.3998332064732484, -0.31271170357784905, -0.1942846440892081, -0.9127803210237302, -0.14664332580363557, -0.06133317524296543, 0.9762368237471596, 0.2565805167734834, 0.07011581024428712, 1.0393800798370414}
 	newSample := data.Data
 	prediction := predict(theta, newSample)
-	fmt.Println(prediction)
+
+	return prediction
 }

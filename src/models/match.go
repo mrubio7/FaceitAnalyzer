@@ -10,3 +10,9 @@ type Match struct {
 	TeamA Team      `json:"teamA"`
 	TeamB Team      `json:"teamB"`
 }
+
+type LiveMatch struct {
+	Result Results
+	TeamA  Team
+	TeamB  Team
+}

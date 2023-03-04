@@ -1,6 +1,8 @@
 package models
 
 type Team struct {
-	Players []Player `json:"players"`
-	Win     string   `json:"win"`
+	TeamName   string   `json:"teamName"`
+	EloAverage string   `json:"averageElo"`
+	Players    []Player `json:"players"`
+	Win        string   `json:"win"`
 }

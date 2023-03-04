@@ -14,6 +14,10 @@ type iMapper interface {
 	TeamDto_To_Team(dto dto.TeamsDto) models.Team
 	PlayersDto_To_Players(dto []dto.PlayersDto) []models.Player
 	PlayerDto_To_Player(dto dto.PlayersDto) models.Player
+
+	LiveMatchDto_To_LiveMatch(dto dto.LiveMatchDto) models.LiveMatch
+	Faction_To_Team(dto dto.Faction) models.Team
+	RosterPlayer_To_Player(dto dto.Roster) models.Player
 }
 
 type mapper struct {
@@ -75,4 +79,37 @@ func (m mapper) PlayerDto_To_Stats(dto dto.PlayersDto) models.MatchStats {
 	value, _ = strconv.ParseFloat(dto.I7, 32)
 	stats.MVP = float32(value)
 	return stats
+}
+
+// ---------LIVE MATCH----------
+func (m mapper) LiveMatchDto_To_LiveMatch(dto dto.LiveMatchDto) models.LiveMatch {
+	var liveMatch models.LiveMatch
+
+	liveMatch.TeamA = m.Faction_To_Team(dto.Payload.Teams.Faction1)
+	liveMatch.TeamB = m.Faction_To_Team(dto.Payload.Teams.Faction2)
+
+	return liveMatch
+}
+
+func (m mapper) Faction_To_Team(dto dto.Faction) models.Team {
+	var team models.Team
+
+	team.EloAverage = strconv.Itoa(dto.Stats.Rating)
+	team.TeamName = dto.Name
+	for _, player := range dto.Roster {
+		team.Players = append(team.Players, m.RosterPlayer_To_Player(player))
+	}
+
+	return team
+}
+
+func (m mapper) RosterPlayer_To_Player(dto dto.Roster) models.Player {
+	var player models.Player
+
+	player.Avatar = dto.Avatar
+	player.Id = dto.ID
+	player.Level = dto.GameSkillLevel
+	player.Nickname = dto.Nickname
+
+	return player
 }

@@ -12,6 +12,7 @@ var Creator iCreator = creator{}
 
 type iCreator interface {
 	CreateMatch(data []byte) models.Match
+	CreateLiveMatch(data []byte) models.LiveMatch
 	CreateMatchListDaysAgo(data []byte, days int) []string
 	CreateStats(player *models.Player, wg *sync.WaitGroup)
 }
@@ -50,7 +51,6 @@ func (c creator) CreateStats(player *models.Player, wg *sync.WaitGroup) {
 func (c creator) CreateMatchListDaysAgo(data []byte, days int) []string {
 	var listMatchesDto dto.ListMatchesDto
 	var listMatches []string
-
 	json.Unmarshal(data, &listMatchesDto)
 
 	for i, dto := range listMatchesDto {
@@ -68,4 +68,15 @@ func (c creator) CreateMatchListDaysAgo(data []byte, days int) []string {
 	}
 
 	return listMatches
+}
+
+func (c creator) CreateLiveMatch(data []byte) models.LiveMatch {
+	var matchDto dto.LiveMatchDto
+	var match models.LiveMatch
+	json.Unmarshal(data, &matchDto)
+
+	match = Mapper.LiveMatchDto_To_LiveMatch(matchDto)
+
+	return match
+
 }

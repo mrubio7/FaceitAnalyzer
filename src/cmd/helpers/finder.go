@@ -14,6 +14,7 @@ var Finder iFinder = finder{}
 type iFinder interface {
 	FindMatchesStats7Days(playerId string) []models.Match
 	FindMatch(matchId string) models.Match
+	FindLiveMatch(matchId string) models.LiveMatch
 }
 
 type finder struct {
@@ -59,6 +60,23 @@ func (f finder) FindMatch(matchId string) models.Match {
 	}
 
 	match := Creator.CreateMatch(data)
+
+	return match
+}
+
+func (f finder) FindLiveMatch(matchId string) models.LiveMatch {
+	response, err := http.Get(apiurls_constants.GetMatchLive + matchId)
+	if err != nil || response.Status == "404" {
+		log.Fatal(err)
+	}
+	if strings.Contains(response.Status, "429") {
+		log.Fatalln("ERROR - Demasiadas peticiones :(")
+		log.Panic()
+	}
+
+	data, err := io.ReadAll(response.Body)
+
+	match := Creator.CreateLiveMatch(data)
 
 	return match
 }

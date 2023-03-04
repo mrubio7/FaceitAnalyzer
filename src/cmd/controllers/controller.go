@@ -18,35 +18,36 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 	r.Header.Set("Authorize", "Bearer cd3d93e5-815d-48ec-b6d9-3b77166a3399")
 
 	matchId := r.URL.Query().Get("q")
-	match := helpers.Finder.FindMatch(matchId)
+	//match := helpers.Finder.FindMatch(matchId)
+	liveMatch := helpers.Finder.FindLiveMatch(matchId)
 
 	var wg sync.WaitGroup
 
 	wg.Add(10)
 
-	go helpers.Creator.CreateStats(&match.TeamA.Players[0], &wg)
-	go helpers.Creator.CreateStats(&match.TeamA.Players[1], &wg)
-	go helpers.Creator.CreateStats(&match.TeamA.Players[2], &wg)
-	go helpers.Creator.CreateStats(&match.TeamA.Players[3], &wg)
-	go helpers.Creator.CreateStats(&match.TeamA.Players[4], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamA.Players[0], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamA.Players[1], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamA.Players[2], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamA.Players[3], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamA.Players[4], &wg)
 
-	go helpers.Creator.CreateStats(&match.TeamB.Players[0], &wg)
-	go helpers.Creator.CreateStats(&match.TeamB.Players[1], &wg)
-	go helpers.Creator.CreateStats(&match.TeamB.Players[2], &wg)
-	go helpers.Creator.CreateStats(&match.TeamB.Players[3], &wg)
-	go helpers.Creator.CreateStats(&match.TeamB.Players[4], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamB.Players[0], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamB.Players[1], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamB.Players[2], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamB.Players[3], &wg)
+	go helpers.Creator.CreateStats(&liveMatch.TeamB.Players[4], &wg)
 
 	wg.Wait()
 
 	var averageTeamA models.Player
 	var averageTeamB models.Player
 
-	for _, player := range match.TeamA.Players {
+	for _, player := range liveMatch.TeamA.Players {
 		sumStats(player.Stats, &averageTeamA.Stats)
 		sumStats(player.EnemyStats, &averageTeamA.EnemyStats)
 		sumStats(player.TeamStats, &averageTeamA.TeamStats)
 	}
-	for _, player := range match.TeamB.Players {
+	for _, player := range liveMatch.TeamB.Players {
 		sumStats(player.Stats, &averageTeamB.Stats)
 		sumStats(player.EnemyStats, &averageTeamB.EnemyStats)
 		sumStats(player.TeamStats, &averageTeamB.TeamStats)
@@ -86,7 +87,9 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 	result.Data = append(result.Data, float64(averageTeamB.Stats.KillPerRound))
 	result.Data = append(result.Data, float64(averageTeamB.Stats.MVP))
 
-	helpers.Analyze.Predict(result)
+	prediction := helpers.Analyze.Predict(result)
+
+	fmt.Fprintf(w, "%f", prediction)
 }
 
 func CreateCSV(w http.ResponseWriter, r *http.Request) {
