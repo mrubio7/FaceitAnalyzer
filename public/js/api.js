@@ -1,0 +1,1 @@
+const getPredictedData = (matchId) => fetch(`/analyze?q=${matchId}`)

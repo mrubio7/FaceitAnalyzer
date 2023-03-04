@@ -9,7 +9,7 @@ import (
 func main() {
 	go api()
 
-	fs := http.FileServer(http.Dir("./public"))
+	fs := http.FileServer(http.Dir("./public/"))
 	http.Handle("/", fs)
 
 	err := http.ListenAndServe(":8080", nil)
