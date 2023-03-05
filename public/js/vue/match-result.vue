@@ -1,7 +1,7 @@
 <template>
 	<section style="margin-top: 100px; color: white;">
 		<div>
-			<section :key="componentKey">
+			<section>
 
 				<div>
 					<input type="range" min="0" max="100" :value="match?.Result*100" disabled>
@@ -47,30 +47,24 @@
 		components: {
 			Player
 		},
-		props: ["matchcode"],
+		props: ["match"],
 		data() {
 			return {
 				componentKey: 0,
-				match: {}
 			}
 		},
 		watch: {
+			match : {},
 			async matchcode() {
-				const re = new RegExp("[a-zA-Z0-9-]*$")
-				const matchId = re.exec(this.matchcode)[0]
+				// const re = new RegExp("[a-zA-Z0-9-]*$")
+				// const matchId = re.exec(this.matchcode)[0]
 
-				const res = await fetch(`/analyze?q=${matchId}`);
-				const finalRes = await res.json();
-				console.log(Object.assign({}, this.match));
-				this.match = Object.assign({}, finalRes);
-				console.log(Object.assign({}, this.match));
-				console.log(this.componentKey);
-			},
-			match: {
-				async handler() {
-					console.log("handler " + this.componentKey);
-					this.componentKey += 1;
-				},
+				// const res = await fetch(`/analyze?q=${matchId}`);
+				// const finalRes = await res.json();
+				// console.log(Object.assign({}, this.match));
+				// this.match = Object.assign({}, finalRes);
+				// console.log(Object.assign({}, this.match));
+				// console.log(this.componentKey);
 			},
 		}
 	}

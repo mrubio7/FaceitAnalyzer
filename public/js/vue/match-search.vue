@@ -7,7 +7,15 @@
 				<button type="button" @click="forceRerender">Go</button>
 			</form>
 		</div>
-		<MatchResult :matchcode="matchId" :key="componentKey" />
+		<div v-if="match != null">
+			<MatchResult :match="match" :key="componentKey" />
+		</div>
+		<div v-else>
+			<div style="margin-top: 100px; color: #232323;" class="flex-column center">
+				<h1>Busca una partida</h1>
+				<img src="/images/undraw_personal_goals_re_iow7.svg" width="500" style="mix-blend-mode: overlay;">
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -23,13 +31,19 @@
 				componentKey: 0,
 				matchId: "",
 				matchIdInput: "",
+				match: null,
 			};
 		},
 		methods: {
 			async forceRerender() {
-				this.matchId = this.matchIdInput;
+				const re = new RegExp("[a-zA-Z0-9-]*$")
+				const matchId = re.exec(this.matchIdInput)[0]
+				
+				
+				const res = await fetch(`/analyze?q=${matchId}`);
+				const finalRes = await res.json();
+				this.match = Object.assign({}, finalRes);
 				await this.$nextTick(); // Espera a que Vue termine de actualizar la propiedad "matchId".
-				this.componentKey += 1; // Actualiza la clave del componente hijo "MatchResult".
 			},
 		}
 	}
