@@ -13,5 +13,3 @@ https://www.faceit.com/es/csgo/room/1-1fbafe40-4a4d-4f9e-982d-8638b871992c <br /
 https://www.faceit.com/es/csgo/room/1-1dee3970-70c9-434e-90fb-93f3cff1bd8d <br />
 
 ## ToDo
-
-* Loader
