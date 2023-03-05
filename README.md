@@ -1,5 +1,7 @@
 # FaceitAnalyzer
 
+## App pública
+
 https://faceitai.onrender.com/
 
 ## Partidas de pruebas
