@@ -10,11 +10,11 @@
 			<div class="flex-justify-between stats">
 				<div class="flex-column center">
 					<span>Avg. K/D</span>
-					<span>{{ player?.stats?.c3.toFixed(2) }}</span>
+					<span>{{ player?.stats?.c2.toFixed(2) }}</span>
 				</div>
 				<div class="flex-column center">
 					<span>Avg. K/R</span>
-					<span>{{ player?.stats?.c2.toFixed(2) }}</span>
+					<span>{{ player?.stats?.c3.toFixed(2) }}</span>
 				</div>
 				<div class="flex-column center">
 					<span>Avg. MVP</span>
