@@ -4,7 +4,8 @@
 			<span class="nickname">
 				{{ player?.nickname }}
 			</span>
-			<img class="avatar" :src="player?.avatar" width="40">
+			<img v-if="player?.avatar" class="avatar" :src="player?.avatar" width="40">
+			<img v-else class="avatar" src="https://icon-library.com/images/unknown-person-icon/unknown-person-icon-10.jpg" width="40">
 			<img class="lvl" :src="'https://beta.leetify.com/assets/images/rank-icons/faceit' + player?.lvl + '.svg'" width="30">
 
 			<div class="flex-justify-between stats">
