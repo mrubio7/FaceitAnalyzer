@@ -1,9 +1,12 @@
 <template>
-	<section style="margin-top: 100px; color: white;">
+	<section style="margin-top: 30px; color: white;">
 		<div>
 			<section>
 
-				<div>
+				<div style="margin-bottom: 20px">
+					<div class="center" style="margin-bottom: -5px;">
+						<h3>Predicción</h3>
+					</div>
 					<input type="range" min="0" max="100" :value="match?.Result*100" disabled>
 				</div>
 				<div class="flex-justify-between">
