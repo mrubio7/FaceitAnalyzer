@@ -266,10 +266,10 @@ const fakeResults = {
 					<input type="range" min="0" max="100" :value="match.Result*100" disabled>
 				</div>
 				<div class="flex-justify-between">
-					<div>
-						<div class="flex-justify-between" style="margin: 10px;">
-							<span>{{ match.TeamA?.teamName }}</span>
-							<span>Average ELO {{ match.TeamA?.averageElo }}</span>
+					<div class="team">
+						<div class="flex-justify-between">
+							<span style="font-variant: all-small-caps;">{{ match.TeamA?.teamName }}</span>
+							<span class="elo">{{ match.TeamA?.averageElo }}</span>
 						</div>
 						<div>
 							<Player :key="componentKey" :player="match?.TeamA?.players[0]"/>
@@ -279,10 +279,10 @@ const fakeResults = {
 							<Player :key="componentKey" :player="match?.TeamA?.players[4]"/>
 						</div>
 					</div>
-					<div>
-						<div class="flex-justify-between" style="margin: 10px;">
-							<span>{{ match.TeamA?.teamName }}</span>
-							<span>Average ELO {{ match.TeamA?.averageElo }}</span>
+					<div class="team">
+						<div class="flex-justify-between">
+							<span style="font-variant: all-small-caps;">{{ match.TeamB?.teamName }}</span>
+							<span class="elo">{{ match.TeamB?.averageElo }}</span>
 						</div>
 						<div>
 							<Player :key="componentKey" :player="match?.TeamB?.players[0]"/>
@@ -300,6 +300,19 @@ const fakeResults = {
 </template>
 
 <style scoped>
+	.team {
+		border: 1px solid #ff550021;
+		border-radius: 10px;
+		margin-top: 20px;
+		padding: 15px;
+		color: #5f5f5f;
+	}
+	.elo {
+		color: #ff5500;
+		font-weight: 900;
+		margin-top: -5px;
+	}
+
 	input[type=range] {
 		-webkit-appearance: none;
 		margin: 10px 0;

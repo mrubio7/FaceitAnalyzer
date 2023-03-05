@@ -8,16 +8,16 @@
 			<img class="lvl" :src="'https://beta.leetify.com/assets/images/rank-icons/faceit' + player?.lvl + '.svg'" width="30">
 
 			<div class="flex-justify-between stats">
-				<div class="flex-column">
+				<div class="flex-column center">
 					<span>Avg. K/D</span>
-					<span>{{ player?.stats?.c3 }}</span>
+					<span>{{ player?.stats?.c3.toFixed(2) }}</span>
 				</div>
-				<div class="flex-column">
+				<div class="flex-column center">
 					<span>Avg. K/R</span>
-					<span>{{ player?.stats?.c2 }}</span>
+					<span>{{ player?.stats?.c2.toFixed(2) }}</span>
 				</div>
-				<div class="flex-column">
-					<span>Avg. K/D</span>
+				<div class="flex-column center">
+					<span>Avg. MVP</span>
 					<span>{{ player?.stats?.c4 }}</span>
 				</div>
 			</div>
@@ -40,8 +40,7 @@
 		height: 60px;
 		padding: 10px;
 		border-radius: 10px;
-		margin-bottom: 20px;
-		margin-top: 10px;
+		margin-top: 20px;
 	}
 
 	.nickname {
@@ -66,5 +65,10 @@
 		font-size: 10pt;
 		margin-right: 80px;
 		padding-top: 10px;
+		color:rgb(90, 90, 90);
+	}
+
+	.center {
+		align-items: center
 	}
 </style>
