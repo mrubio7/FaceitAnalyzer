@@ -22,6 +22,7 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 
 	matchId := r.URL.Query().Get("q")
 	//match := helpers.Finder.FindMatch(matchId)
+
 	liveMatch := helpers.Finder.FindLiveMatch(matchId)
 
 	var wg sync.WaitGroup

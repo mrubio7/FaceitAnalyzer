@@ -1,3 +1,16 @@
+<template>
+	<div>
+		<span style="color: white; padding-left: 5px;">Buscar partida:</span>
+		<div class="w1000">
+			<form role="search">
+				<input type="search" v-model="matchIdInput" placeholder="https://www.faceit.com/es/csgo/room/1-4d22f711-afae-474d-8443-9ca03943f843" required />
+				<button type="button" @click="forceRerender">Go</button>
+			</form>
+		</div>
+		<MatchResult :matchcode="matchId" :key="componentKey" />
+	</div>
+</template>
+
 <script>
 	import MatchResult from './match-result.vue';
 	
@@ -8,28 +21,20 @@
 		data() {
 			return {
 				componentKey: 0,
+				matchId: "",
+				matchIdInput: "",
 			};
 		},
 		methods: {
-			forceRerender() {
-				this.componentKey += 1;
-			}
+			async forceRerender() {
+				this.matchId = this.matchIdInput;
+				await this.$nextTick(); // Espera a que Vue termine de actualizar la propiedad "matchId".
+				this.componentKey += 1; // Actualiza la clave del componente hijo "MatchResult".
+			},
 		}
 	}
 </script>
 
-<template>
-	<div>
-		<span style="color: white; padding-left: 5px;">Buscar partida:</span>
-		<div class="w1000">
-			<form role="search">
-				<input type="search" placeholder="https://www.faceit.com/es/csgo/room/1-4d22f711-afae-474d-8443-9ca03943f843" required />
-				<button type="submit" @click="">Go</button>
-			</form>
-		</div>
-		<MatchResult :key="componentKey" />
-	</div>
-</template>
 
 <style scoped>
 	form {
