@@ -1,30 +1,7 @@
-const getPredictedData = (matchId) => fetch(`/analyze?q=${matchId}`)
+<script>
+	import Player from './player-result.vue'
 
-const fakeData = {
-	"Data": [
-	  1.0287201404571533,
-	  0.701583981513977,
-	  3.7248001098632812,
-	  1.051740050315857,
-	  0.7106479406356812,
-	  3.895599842071533,
-	  1.2260000705718994,
-	  0.8402000665664673,
-	  4.659999847412109,
-	  0.9898281097412109,
-	  0.6740398406982422,
-	  3.693999767303467,
-	  1.0472561120986938,
-	  0.6947080492973328,
-	  3.810399293899536,
-	  1.073799967765808,
-	  0.7401999831199646,
-	  3.9800000190734863
-	],
-	"Label": 0
-};
-
-const fakeResult = {
+const fakeResults = {
 	Result: 0.235673,
 	TeamA: {
 	  teamName: "team_Kara0ne",
@@ -146,7 +123,7 @@ const fakeResult = {
 		  playerId: "03f08112-d3df-478e-a138-37232624555a",
 		  nickname: "greensk1y",
 		  lvl: 4,
-		  avatar: "5_1596115963730.jpg",
+		  avatar: "https://distribution.faceit-cdn.net/images/275a340c-dced-4dcb-8e4f-6d55e8792718.jpeg",
 		  stats: {
 			c3: 0.94300014,
 			c2: 1.434,
@@ -251,3 +228,163 @@ const fakeResult = {
 	  win: ""
 	}
 }
+
+	export default {
+		components: {
+			Player
+		},
+		data() {
+			return {
+				componentKey: 0,
+				match: {}
+			}
+		},
+		methods: {
+			async getMatch() {
+				// const res = await fetch("/analyze?q=1-5c90d54c-6bd2-4d0a-81dd-e3f6656942d5");
+				// const finalRes = await res.json();
+				this.match = fakeResults;
+				this.forceRerender();
+			},
+			forceRerender() {
+				this.componentKey += 1;
+			}
+		},
+		mounted() {
+			this.getMatch();
+		},
+	}
+</script>
+
+
+<template>
+	<section style="margin-top: 100px; color: white;">
+		<div>
+			<section>
+
+				<div>
+					<input type="range" min="0" max="100" :value="match.Result*100" disabled>
+				</div>
+				<div class="flex-justify-between">
+					<div>
+						<div class="flex-justify-between" style="margin: 10px;">
+							<span>{{ match.TeamA?.teamName }}</span>
+							<span>Average ELO {{ match.TeamA?.averageElo }}</span>
+						</div>
+						<div>
+							<Player :key="componentKey" :player="match?.TeamA?.players[0]"/>
+							<Player :key="componentKey" :player="match?.TeamA?.players[1]"/>
+							<Player :key="componentKey" :player="match?.TeamA?.players[2]"/>
+							<Player :key="componentKey" :player="match?.TeamA?.players[3]"/>
+							<Player :key="componentKey" :player="match?.TeamA?.players[4]"/>
+						</div>
+					</div>
+					<div>
+						<div class="flex-justify-between" style="margin: 10px;">
+							<span>{{ match.TeamA?.teamName }}</span>
+							<span>Average ELO {{ match.TeamA?.averageElo }}</span>
+						</div>
+						<div>
+							<Player :key="componentKey" :player="match?.TeamB?.players[0]"/>
+							<Player :key="componentKey" :player="match?.TeamB?.players[1]"/>
+							<Player :key="componentKey" :player="match?.TeamB?.players[2]"/>
+							<Player :key="componentKey" :player="match?.TeamB?.players[3]"/>
+							<Player :key="componentKey" :player="match?.TeamB?.players[4]"/>
+						</div>
+					</div>
+				</div>
+
+			</section>
+		</div>
+	</section>
+</template>
+
+<style scoped>
+	input[type=range] {
+		-webkit-appearance: none;
+		margin: 10px 0;
+		width: 100%;
+	}
+	input[type=range]:focus {
+		outline: none;
+	}
+	input[type=range]::-webkit-slider-runnable-track {
+		width: 100%;
+		height: 12.8px;
+		cursor: pointer;
+		box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+		background: linear-gradient(90deg, #29292986,#ff550086,#29292986);
+		border-radius: 25px;
+		border: 1px solid #00010186;
+	}
+	input[type=range]::-webkit-slider-thumb {
+		box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+		border: 0px solid #000000;
+		height: 20px;
+		width: 39px;
+		border-radius: 7px;
+		background: #ff5500;
+		cursor: pointer;
+		-webkit-appearance: none;
+		margin-top: -3.6px;
+	}
+	input[type=range]:focus::-webkit-slider-runnable-track {
+		background: #d4751c;
+	}
+	input[type=range]::-moz-range-track {
+		width: 100%;
+		height: 12.8px;
+		cursor: pointer;
+		animate: 0.2s;
+		box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+		background: #f54d0b;
+		border-radius: 25px;
+		border: 0px solid #000101;
+	}
+	input[type=range]::-moz-range-thumb {
+		box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+		border: 0px solid #000000;
+		height: 20px;
+		width: 39px;
+		border-radius: 7px;
+		background: #d64105;
+		cursor: pointer;
+	}
+	input[type=range]::-ms-track {
+		width: 100%;
+		height: 12.8px;
+		cursor: pointer;
+		animate: 0.2s;
+		background: transparent;
+		border-color: transparent;
+		border-width: 39px 0;
+		color: transparent;
+	}
+	input[type=range]::-ms-fill-lower {
+		background: #ac51b5;
+		border: 0px solid #000101;
+		border-radius: 50px;
+		box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+	}
+	input[type=range]::-ms-fill-upper {
+		background: #ac51b5;
+		border: 0px solid #000101;
+		border-radius: 50px;
+		box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+	}
+	input[type=range]::-ms-thumb {
+		box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+		border: 0px solid #000000;
+		height: 20px;
+		width: 39px;
+		border-radius: 7px;
+		background: #df3906;
+		cursor: pointer;
+	}
+	input[type=range]:focus::-ms-fill-lower {
+		background: #ac51b5;
+	}
+	input[type=range]:focus::-ms-fill-upper {
+		background: #ac51b5;
+	}
+</style>

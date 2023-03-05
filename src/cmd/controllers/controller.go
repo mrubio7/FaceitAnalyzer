@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"faceitAI/src/cmd/helpers"
 	"faceitAI/src/models"
 	"fmt"
@@ -15,7 +16,9 @@ import (
 )
 
 func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
-	r.Header.Set("Authorize", "Bearer cd3d93e5-815d-48ec-b6d9-3b77166a3399")
+	//r.Header.Set("Authorize", "Bearer cd3d93e5-815d-48ec-b6d9-3b77166a3399")
+	r.Header.Set("Authorize", "Bearer 5650365f-4b6e-41d0-90d3-f9a3bcb5dccb")
+	w.Header().Set("Content-Type", "application/json")
 
 	matchId := r.URL.Query().Get("q")
 	//match := helpers.Finder.FindMatch(matchId)
@@ -87,9 +90,11 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 	result.Data = append(result.Data, float64(averageTeamB.Stats.KillPerRound))
 	result.Data = append(result.Data, float64(averageTeamB.Stats.MVP))
 
-	prediction := helpers.Analyze.Predict(result)
+	liveMatch.Result = helpers.Analyze.Predict(result)
 
-	fmt.Fprintf(w, "%f", prediction)
+	// lm, _ := json.Marshal(liveMatch)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(liveMatch)
 }
 
 func AnalyzePreviusMatch(w http.ResponseWriter, r *http.Request) {

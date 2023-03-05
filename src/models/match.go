@@ -12,7 +12,7 @@ type Match struct {
 }
 
 type LiveMatch struct {
-	Result Results
+	Result float64
 	TeamA  Team
 	TeamB  Team
 }
