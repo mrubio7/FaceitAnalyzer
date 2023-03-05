@@ -2,7 +2,7 @@
   <div class="header">
 	<div class="header-items">
 		<h3>faceit AI analyzer</h3>
-		<!-- <h5 class="about">mrubio7</h5> -->
+		<a class="about" href="https://www.linkedin.com/in/mrubioa/">mrubio</a>
 	</div>
   </div>
 </template>
@@ -24,6 +24,15 @@
 		padding-right: 50px;
 	}
 	.about {
-		color: rgb(151, 151, 151)
+		margin-top: 22px;
+		color: rgb(92, 92, 92);
+		font-size: 10pt;
+		text-decoration: none;
+		font-variant: normal;
+		font-weight: 600;
+	}
+	.about:hover {
+		color: rgb(153, 153, 153);
+		transition: 0.5s;
 	}
 </style>
