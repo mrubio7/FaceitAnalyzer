@@ -93,6 +93,8 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 
 	liveMatch.Result = helpers.Analyze.Predict(result)
 
+	liveMatch.ReadableResult = createReadableResult(liveMatch.Result)
+
 	// lm, _ := json.Marshal(liveMatch)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(liveMatch)
@@ -390,4 +392,44 @@ func averageStats(stats *models.MatchStats, num int) {
 	stats.KillDeathRating /= float32(num)
 	stats.KillPerRound /= float32(num)
 	stats.MVP /= float32(num)
+}
+
+func createReadableResult(res float64) string {
+	results := []string{
+		"16-0",
+		"16-1",
+		"16-2",
+		"16-3",
+		"16-4",
+		"16-5",
+		"16-6",
+		"16-7",
+		"16-8",
+		"16-9",
+		"16-10",
+		"16-11",
+		"16-12",
+		"16-13",
+		"16-14",
+		"14-16",
+		"13-16",
+		"12-16",
+		"11-16",
+		"10-16",
+		"9-16",
+		"8-16",
+		"7-16",
+		"6-16",
+		"5-16",
+		"4-16",
+		"3-16",
+		"2-16",
+		"1-16",
+		"0-16"}
+
+	temp := 1.0 / float64(len(results))
+
+	index := res / temp
+
+	return results[int(index)]
 }
