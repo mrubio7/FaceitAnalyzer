@@ -12,7 +12,8 @@ type Match struct {
 }
 
 type LiveMatch struct {
-	Result float64
-	TeamA  Team
-	TeamB  Team
+	ReadableResult string
+	Result         float64
+	TeamA          Team
+	TeamB          Team
 }

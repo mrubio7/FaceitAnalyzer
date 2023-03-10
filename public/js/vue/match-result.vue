@@ -3,9 +3,12 @@
 		<div>
 			<section>
 
-				<div style="margin-bottom: 20px">
+				<div style="margin-bottom: 10px; color: #666">
 					<div class="center" style="margin-bottom: -5px;">
 						<h3>Predicción</h3>
+					</div>
+					<div class="flex center" style="margin-bottom: -5px">
+						<h2>{{ match?.ReadableResult }}</h2>
 					</div>
 					<input type="range" min="0" max="100" :value="match?.Result*100" disabled>
 				</div>
@@ -58,17 +61,6 @@
 		},
 		watch: {
 			match : {},
-			async matchcode() {
-				// const re = new RegExp("[a-zA-Z0-9-]*$")
-				// const matchId = re.exec(this.matchcode)[0]
-
-				// const res = await fetch(`/analyze?q=${matchId}`);
-				// const finalRes = await res.json();
-				// console.log(Object.assign({}, this.match));
-				// this.match = Object.assign({}, finalRes);
-				// console.log(Object.assign({}, this.match));
-				// console.log(this.componentKey);
-			},
 		}
 	}
 </script>
