@@ -239,16 +239,6 @@ func CreateCSV(w http.ResponseWriter, r *http.Request) {
 			sumStats(player.TeamStats, &averageTeamB.TeamStats)
 		}
 
-		averageStats(&averageTeamA.EnemyStats, 5)
-		averageStats(&averageTeamA.TeamStats, 5)
-		averageStats(&averageTeamA.Stats, 5)
-		fmt.Printf("Averaged TeamA  ")
-
-		averageStats(&averageTeamB.EnemyStats, 5)
-		averageStats(&averageTeamB.TeamStats, 5)
-		averageStats(&averageTeamB.Stats, 5)
-		fmt.Printf("Averaged TeamB\n")
-
 		str := fmt.Sprintf("%s, %s, %s\n",
 			createPlayerStat(averageTeamA),
 			createPlayerStat(averageTeamB),
@@ -263,7 +253,7 @@ func CreateCSV(w http.ResponseWriter, r *http.Request) {
 }
 
 func Training(w http.ResponseWriter, r *http.Request) {
-	fd, _ := os.Open("data/dataCopy.csv")
+	fd, _ := os.Open("data/dataMerged.csv")
 	f := csv.NewReader(fd)
 
 	records, _ := f.ReadAll()
