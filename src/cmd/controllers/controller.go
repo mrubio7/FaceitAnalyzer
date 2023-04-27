@@ -17,8 +17,6 @@ import (
 
 func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 	//r.Header.Set("Authorize", "Bearer cd3d93e5-815d-48ec-b6d9-3b77166a3399")
-	r.Header.Set("Authorize", "Bearer 5650365f-4b6e-41d0-90d3-f9a3bcb5dccb")
-	w.Header().Set("Content-Type", "application/json")
 
 	matchId := r.URL.Query().Get("q")
 	//match := helpers.Finder.FindMatch(matchId)
@@ -100,7 +98,7 @@ func AnalyzeMatch(w http.ResponseWriter, r *http.Request) {
 }
 
 func AnalyzePreviusMatch(w http.ResponseWriter, r *http.Request) {
-	r.Header.Set("Authorize", "Bearer cd3d93e5-815d-48ec-b6d9-3b77166a3399")
+	r.Header.Set("Authorization", "Bearer 3a839030-b132-4733-8815-da9a478e835a")
 
 	matchId := r.URL.Query().Get("q")
 	//match := helpers.Finder.FindMatch(matchId)
