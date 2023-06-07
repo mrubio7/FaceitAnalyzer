@@ -1,7 +1,5 @@
 # FaceitAnalyzer
 
-⚠️ Work in progress (Faceit api denies requests) ⚠️
-
 App use a logistic regression to analyze stats of players (mates and enemies) and predict the match result.
 
 ## App pública
